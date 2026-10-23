@@ -1,0 +1,49 @@
+﻿# Secrets: never publish real environment files
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!.env.*.example
+!**/.env.example
+!**/.env.*.example
+
+# Python virtual environments
+venv/
+.venv/
+**/venv/
+**/.venv/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Node dependencies
+node_modules/
+**/node_modules/
+
+# Generated frontend builds
+dist/
+**/dist/
+build/
+**/build/
+
+# Temporary and log files
+*.log
+*.tmp
+*.bak
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test and coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Generated inspection output
+project_structure.txt
