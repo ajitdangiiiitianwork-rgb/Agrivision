@@ -8,6 +8,7 @@ from .recommendations import bp as recs_bp
 from .auth import bp as auth_bp  # <-- ensures /api/auth/* exists
 from .ml import ml_bp
 from .ml_meta import bp_ml_meta
+from .gemini import gemini_bp
 
 
 def register_blueprints(app):
@@ -20,4 +21,4 @@ def register_blueprints(app):
     app.register_blueprint(auth_bp)  # <-- /api/auth/register & /api/auth/login
     app.register_blueprint(ml_bp)
     app.register_blueprint(bp_ml_meta)
-
+    app.register_blueprint(gemini_bp)  # <-- /api/chat & /api/generate-text

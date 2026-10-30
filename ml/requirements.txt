@@ -7,4 +7,4 @@ scikit-learn
 xgboost
 joblib
 pillow
-tensorflow==2.20.0
+tensorflow>=2.16.0

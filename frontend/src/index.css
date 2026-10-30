@@ -2,12 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-* { @apply transition-colors duration-200; }
-:root { color-scheme: light dark; }
+* {
+  @apply transition-colors duration-150;
+}
+
+:root {
+  color-scheme: light dark;
+}
 
 body {
-  @apply bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100;
+  @apply bg-[#FAFAF5] dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans antialiased;
   background-image:
-    radial-gradient(1200px 600px at 100% -10%, rgba(14,165,233,.08), transparent 60%),
-    radial-gradient(1000px 500px at 0% 110%, rgba(16,185,129,.08), transparent 60%);
+    radial-gradient(1200px 600px at 50% -10%, rgba(46,125,50,.07), transparent 60%),
+    radial-gradient(1000px 500px at 0% 110%, rgba(16,185,129,.06), transparent 60%);
+  min-height: 100vh;
+}
+
+/* Accessible focus ring defaults */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #2E7D32;
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

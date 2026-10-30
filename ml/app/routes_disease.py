@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from .model_registry import load_disease_model
+from .disease_knowledge import get_disease_intelligence
 import numpy as np
 from PIL import Image
 import io
@@ -55,9 +56,21 @@ async def predict_disease(file: UploadFile = File(...)):
         for index in top_indices
     ]
 
+    diagnosis = predictions[0]["disease"]
+    confidence = predictions[0]["confidence"]
+    intel = get_disease_intelligence(diagnosis, confidence=confidence, top_predictions=predictions)
+
     return {
-        "diagnosis": predictions[0]["disease"],
-        "confidence": predictions[0]["confidence"],
+        "diagnosis": diagnosis,
+        "confidence": confidence,
         "top_predictions": predictions,
-        "model_version": "efficientnetb0-v1"
+        "model_version": "efficientnetb0-v1",
+        "causes": intel["primary_cause"],
+        "environmental_triggers": intel["environmental_triggers"],
+        "organic_remedies": intel["organic_remedies"],
+        "chemical_remedies": intel["chemical_remedies"],
+        "preventative_actions": intel["preventative_actions"],
+        "differential_diagnoses": intel["differential_diagnoses"],
+        "pathogen": intel["pathogen_name"],
+        "pathogen_type": intel["pathogen_type"]
     }

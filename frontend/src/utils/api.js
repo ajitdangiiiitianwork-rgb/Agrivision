@@ -1,5 +1,6 @@
 // src/utils/api.js
 const API_BASE = (import.meta.env.VITE_API_BASE || "/api").replace(/\/+$/, "");
+const DIRECT_BACKEND = (import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api").replace(/\/+$/, "");
 const DEFAULT_TIMEOUT = 20000; // 20s
 
 async function http(
@@ -9,19 +10,34 @@ async function http(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
 
-  try {
-    const res = await fetch(`${API_BASE}${path}`, {
+  const makeRequest = (url) =>
+    fetch(url, {
       method,
       headers: {
-        // Only send JSON header when body is JSON
         ...(json ? { "content-type": "application/json" } : {}),
         Accept: "application/json",
         ...headers,
       },
       body: formData ? formData : json ? JSON.stringify(json) : undefined,
       signal: signal ?? controller.signal,
-      credentials: credentials ?? "same-origin", // change to "include" if you use cookie auth
+      credentials: credentials ?? "same-origin",
     });
+
+  try {
+    let res;
+    try {
+      res = await makeRequest(`${API_BASE}${path}`);
+    } catch (netErr) {
+      if (API_BASE !== DIRECT_BACKEND && !signal?.aborted) {
+        try {
+          res = await makeRequest(`${DIRECT_BACKEND}${path}`);
+        } catch {
+          throw netErr;
+        }
+      } else {
+        throw netErr;
+      }
+    }
 
     const ct = res.headers.get("content-type") || "";
     const data = ct.includes("application/json") ? await res.json() : await res.text();
@@ -62,21 +78,34 @@ export function marketForecast(body) {
 }
 // Backwards-compatible alias some pages may import
 export function fetchMarketPrices(params = {}) {
-  // Provide sensible defaults so the dashboard can call this without args
-  const { commodity = "wheat", mandi = "delhi", horizon_days = 7 } = params;
+  const { commodity = "tomato", mandi = "pune", horizon_days = 7 } = params;
   return marketForecast({ commodity, mandi, horizon_days });
+}
+
+export function fetchMandis() {
+  return http("/markets/mandis");
+}
+
+export function fetchCommodities() {
+  return http("/markets/commodities");
 }
 
 // Weather
 export function weatherForecast({ lat, lon, days = 7 }) {
-  // GET /api/weather/forecast?lat=..&lon=..&days=..
   const q = new URLSearchParams({ lat: String(lat), lon: String(lon), days: String(days) });
   return http(`/weather/forecast?${q.toString()}`);
 }
 
 // Chat / Assistant
-export function chatWithBot({ message, lang = "en", image, context = {} }) {
-  // POST /api/chat  (JSON or multipart if image provided)
+export function chatWithBot(arg1, arg2) {
+  let message, lang, image, context;
+  if (typeof arg1 === "object" && arg1 !== null) {
+    ({ message, lang = "mr", image, context = {} } = arg1);
+  } else {
+    message = arg1;
+    lang = arg2 || "mr";
+    context = {};
+  }
   if (image) {
     const fd = new FormData();
     fd.append("message", message);
@@ -90,28 +119,22 @@ export function chatWithBot({ message, lang = "en", image, context = {} }) {
 
 /* ===== Fields CRUD for /app/fields ===== */
 export function listFields() {
-  // GET /api/fields
   return http("/fields");
 }
 export function createField(payload) {
-  // POST /api/fields
   return http("/fields", { method: "POST", json: payload });
 }
 export function getField(id) {
-  // GET /api/fields/:id
   return http(`/fields/${id}`);
 }
 export function updateField(id, patch) {
-  // PATCH /api/fields/:id
   return http(`/fields/${id}`, { method: "PATCH", json: patch });
 }
 export function deleteField(id) {
-  // DELETE /api/fields/:id
   return http(`/fields/${id}`, { method: "DELETE" });
 }
 
 /* ===== Convenience helper (optional) ===== */
-// lets you do: import { api } from "../utils/api"; await api.post("/fields", data);
 export const api = {
   get: (path, opts) => http(path, { method: "GET", ...(opts || {}) }),
   post: (path, body) =>
@@ -122,5 +145,4 @@ export const api = {
   delete: (path) => http(path, { method: "DELETE" }),
 };
 
-// allow default import: import api from "../utils/api"
 export default api;

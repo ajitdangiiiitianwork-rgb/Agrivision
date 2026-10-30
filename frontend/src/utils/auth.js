@@ -15,7 +15,9 @@ function migrateIfNeeded() {
     if (legacyUserRaw && !localStorage.getItem(USER_KEY)) {
       localStorage.setItem(USER_KEY, legacyUserRaw);
     }
-  } catch {}
+  } catch (err) {
+    void err;
+  }
 }
 
 export function getUser() {

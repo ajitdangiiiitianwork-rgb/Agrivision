@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { User, Mail, Phone, MapPin, Settings, Camera } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getUser, getToken, isAuthenticated, setUser as saveUser } from "../utils/auth";
+import { getUser, getToken, setUser as saveUser } from "../utils/auth";
 
 export default function Profile() {
   const navigate = useNavigate();

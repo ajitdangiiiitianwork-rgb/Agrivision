@@ -1,3 +1,4 @@
+import React from "react";
 import { cn } from "./cn";
 
 export default function Button({ as:Comp="button", className, variant="primary", size="md", ...props }) {
@@ -13,5 +14,5 @@ export default function Button({ as:Comp="button", className, variant="primary",
     outline: "border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100/50 dark:hover:bg-neutral-800/40",
     ghost: "hover:bg-neutral-100/70 dark:hover:bg-neutral-800/50"
   };
-  return <Comp className={cn(base, sizes[size], variants[variant], className)} {...props} />;
+  return React.createElement(Comp, { className: cn(base, sizes[size], variants[variant], className), ...props });
 }

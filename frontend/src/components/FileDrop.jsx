@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
 
 export default function FileDrop({ onFile }) {
   const ref = useRef(null);
@@ -10,7 +9,7 @@ export default function FileDrop({ onFile }) {
   };
 
   return (
-    <motion.div
+    <div
       onDragOver={(e)=>{ e.preventDefault(); setHover(true); }}
       onDragLeave={()=>setHover(false)}
       onDrop={(e)=>{ e.preventDefault(); setHover(false); handle(e.dataTransfer.files?.[0]); }}
@@ -19,6 +18,6 @@ export default function FileDrop({ onFile }) {
     >
       <input ref={ref} type="file" accept="image/*" className="hidden" onChange={(e)=> handle(e.target.files?.[0])} />
       <div className="text-sm opacity-80">Drop an image here or click to browse</div>
-    </motion.div>
+    </div>
   );
 }

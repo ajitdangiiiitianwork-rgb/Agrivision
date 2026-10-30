@@ -45,10 +45,10 @@ export default function FieldFormNew() {
       toast.success("Field saved");
       reset();
       nav("/app/fields");
-    } catch (e) {
+    } catch {
       // offline or server down -> queue request for Sync Center
       await queueRequest({ type: "create-field", payload: data });
-      toast((t) => (
+      toast(() => (
         <span>Offline — saved to <b>Sync Center</b>.</span>
       ));
       nav("/app/sync");

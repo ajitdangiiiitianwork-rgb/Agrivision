@@ -8,6 +8,7 @@ import TopBar from "./components/ui/TopBar";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import DiseaseDetect from "./pages/DiseaseDetect";
 
 // App (farmer portal) pages
 import Dashboard from "./pages/Dashboard";
@@ -19,14 +20,13 @@ import MarketPrices from "./pages/MarketPrices";
 import AdvisoryFeed from "./pages/AdvisoryFeed";
 import SoilHealth from "./pages/SoilHealth";
 import ScoutingLogs from "./pages/ScoutingLogs";
-import Inventory from "./pages/Inventory"; // ensure filename matches
+import Inventory from "./pages/Inventory";
 import Sales from "./pages/Sales";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import SyncCenter from "./pages/SyncCenter";
-import DiseaseDetect from "./pages/DiseaseDetect";
 import Chat from "./pages/Chat";
-import Profile from "./pages/Profile"; // NEW
+import Profile from "./pages/Profile";
 
 // Utility / error pages
 import Offline from "./pages/Offline";
@@ -49,14 +49,15 @@ function ProtectedRoute() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100">
+    <div className="min-h-screen bg-warm-neutral dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100">
       <TopBar />
 
       <Routes>
-        {/* Public / marketing */}
+        {/* Public / Primary Farmer Journey */}
         <Route path="/" element={<Landing />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
+        <Route path="/diseasedetect" element={<DiseaseDetect />} />
 
         {/* Protected app area */}
         <Route element={<ProtectedRoute />}>
@@ -74,9 +75,8 @@ export default function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/sync" element={<SyncCenter />} />
-          <Route path="/diseasedetect" element={<DiseaseDetect />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/profile" element={<Profile />} /> {/* NEW */}
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         {/* System / fallback */}

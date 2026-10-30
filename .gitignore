@@ -1,4 +1,4 @@
-﻿# Secrets: never publish real environment files
+# Secrets: never publish real environment files
 .env
 .env.*
 **/.env
@@ -45,5 +45,11 @@ Thumbs.db
 .coverage
 htmlcov/
 
+# Large archives and binaries (GitHub blocks >100MB)
+*.zip
+tools/
+SE/
+
 # Generated inspection output
 project_structure.txt
+inspect_project.py
